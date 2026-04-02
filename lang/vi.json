@@ -1,0 +1,14 @@
+{
+    "Tên đăng nhập": "Tên đăng nhập",
+    "Mật khẩu": "Mật khẩu",
+    "Email": "Email",
+    "Số điện thoại": "Số điện thoại",
+    "Họ và tên": "Họ và tên",
+    "Nhập lại mật khẩu": "Nhập lại mật khẩu",
+    "The :attribute field is required.": "Trường :attribute không được để trống.",
+    "The :attribute must be at least :min characters.": "Trường :attribute phải có ít nhất :min ký tự.",
+    "The :attribute and :other must match.": "Trường :attribute và :other phải giống nhau.",
+    "The :attribute has already been taken.": "Thông tin :attribute đã được sử dụng.",
+    "The :attribute must be a valid email address.": "Định dạng :attribute không hợp lệ.",
+    "The :attribute format is invalid.": "Định dạng :attribute không đúng."
+}

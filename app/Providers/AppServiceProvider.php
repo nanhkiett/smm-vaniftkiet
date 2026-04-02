@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
+use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Ép Livewire sử dụng URL Gateway chuyên nghiệp
+        Livewire::setUpdateRoute(function ($handle) {
+            return Route::post('/api/v1/internal/gateway/execute', $handle)
+                ->middleware('web');
+        });
     }
 }
