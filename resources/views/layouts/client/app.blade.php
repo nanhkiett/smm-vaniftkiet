@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <!--begin::Head-->
 
 <head>
@@ -21,6 +21,8 @@
 
     <!--begin::Vendor Stylesheets(used for this page only)-->
     @stack('styles')
+    {{-- Luôn nạp profile.css trên layout client: tránh head morph thiếu CSS khi wire:navigate từ đơn → hồ sơ --}}
+    <link href="{{ asset('assets/css/pages/profile.css') }}" rel="stylesheet" type="text/css" data-navigate-track />
     <!--end::Vendor Stylesheets-->
 
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
@@ -31,12 +33,31 @@
 
     <!-- SPA Optimizations Styles -->
     <link href="{{ asset('assets/custom/spa-optimize.css') }}" rel="stylesheet" type="text/css" data-navigate-track />
+    
+    <!-- Critical Boot Styles (Inline to prevent F5 Scroll & Spinner Lock) -->
+    <style>
+        html.page-loading, body.page-loading { overflow: hidden !important; height: 100%; }
+        .page-loader { 
+            display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: 100000; background: #ffffff; align-items: center; justify-content: center;
+        }
+        [data-bs-theme="dark"] .page-loader { background: #1d1e2b; }
+        body:not(.page-loading) .page-loader { display: none !important; }
+    </style>
+    <script>
+        // Fail-safe: Tự động gỡ bỏ spinner sau 2 giây nếu Metronic bị kẹt (Xử lý dứt điểm cho F5)
+        setTimeout(() => {
+            document.body.classList.remove('page-loading');
+            const loader = document.querySelector('.page-loader');
+            if (loader) loader.style.display = 'none';
+        }, 2000);
+    </script>
 
     @livewireStyles
 
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
-    <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+    <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}?v=1.1" data-navigate-track></script>
+    <script src="{{ asset('assets/js/scripts.bundle.js') }}?v=1.1" data-navigate-track></script>
     <!--end::Global Javascript Bundle-->
 </head>
 <!--end::Head-->
@@ -44,6 +65,25 @@
 <!--begin::Body-->
 
 <body id="kt_app_body" data-kt-app-layout="dark-sidebar" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" data-kt-app-host-url="{{ asset('assets/') }}" class="app-default">
+    
+    <!-- Layout Marker: Livewire morph có thể làm mất data-kt-app-* trên body → header mất màu (CSS variables). -->
+    <div id="kt_app_layout_sync"
+         data-body-class="app-default"
+         data-body-attrs="{{ e(json_encode([
+             'id' => 'kt_app_body',
+             'data-kt-app-layout' => 'dark-sidebar',
+             'data-kt-app-header-fixed' => 'true',
+             'data-kt-app-header-fixed-mobile' => 'true',
+             'data-kt-app-sidebar-enabled' => 'true',
+             'data-kt-app-sidebar-fixed' => 'true',
+             'data-kt-app-sidebar-hoverable' => 'true',
+             'data-kt-app-sidebar-push-header' => 'true',
+             'data-kt-app-sidebar-push-toolbar' => 'true',
+             'data-kt-app-sidebar-push-footer' => 'true',
+             'data-kt-app-toolbar-enabled' => 'true',
+             'data-kt-app-host-url' => asset('assets/'),
+         ])) }}"
+         style="display:none;"></div>
 
     <!-- Metronic Page Loader (Chiêu 2) -->
     <div class="page-loader flex-column">
@@ -115,8 +155,11 @@
 
     @livewireScripts
 
+    {{-- profile.js luôn có trên shell client; notify đã xử lý trong spa-optimize.js --}}
+    <script src="{{ asset('assets/js/pages/profile.js') }}?v=1.2" data-navigate-track></script>
+
     <!-- SPA Custom Handler JS -->
-    <script src="{{ asset('assets/custom/spa-optimize.js') }}" data-navigate-track></script>
+    <script src="{{ asset('assets/custom/spa-optimize.js') }}?v={{ time() }}" data-navigate-track></script>
 </body>
 <!--end::Body-->
 

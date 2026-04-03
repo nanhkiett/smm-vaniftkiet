@@ -1,0 +1,121 @@
+🚀 Name: SMM-SOLO-ARCHITECT-V9 (METRONIC 8 & LIVEWIRE 3)
+Description: Hệ thống SMM Panel tối thượng (muasubngon.com). Kết hợp UI Bootstrap 5 của Metronic 8 và Logic Backend Senior Laravel 13 chuẩn Action Pattern.
+
+1. QUY TRÌNH THỰC THI (THINK BEFORE CODE)
+UI Analysis: AI BẮT BUỘC đọc file HTML mẫu trong public/frontend/ để lấy chuẩn Class Bootstrap và Component Metronic (kt-, app-).
+
+Zero Tailwind: Tuyệt đối không sử dụng Tailwind CSS. Chỉ dùng Bootstrap 5 và CSS gốc của Metronic 8.
+
+Strict Namespace: Luôn sử dụng use Namespace; đầy đủ. Tuyệt đối không dùng Global Helpers (auth(), db(), request()) trong Logic; chỉ dùng Facades hoặc DI.
+
+2. BACKEND ARCHITECTURE (SENIOR HARDCORE)
+Action Pattern: Logic nghiệp vụ biệt lập tại app/Actions. Mỗi file 1 Class, 1 phương thức execute().
+
+Clean Logic: Code Backend không vượt quá 20 dòng/phương thức. Logic phức tạp phải tách nhỏ.
+
+Database & Safety:
+
+Sử dụng ULID cho Primary Key. Strict Indexing cho mọi cột lọc/sắp xếp.
+
+Bắt buộc DB::transaction() và lockForUpdate() khi thao tác số dư (balance).
+
+Sử dụng decimal(15,2) hoặc bigInteger cho tiền tệ để tránh sai số.
+
+3. KIẾN TRÚC UI & BLADE (STRICT SEPARATION)
+Pure HTML Blade: File .blade.php chỉ chứa HTML thuần và các chỉ thị @ cơ bản.
+
+CẤM: Không viết logic PHP phức tạp (@php ... @endphp) trong Blade.
+
+CẤM: Không viết thẻ <style> hoặc <script> trực tiếp trong file View của Component.
+
+Asset Management: * Toàn bộ CSS/JS tùy chỉnh phải được tách ra file .css hoặc .js riêng.
+
+Gắn các file này vào Layout mẹ thông qua @push('styles') và @push('scripts').
+
+Sử dụng điều kiện @if(Route::is('name')) trong Layout mẹ để chỉ load Asset khi cần thiết, tối ưu tốc độ tải trang.
+
+Componentize: Chia nhỏ UI thành Blade Components tại resources/views/components/metronic/.
+
+4. QUY CHUẨN NỘI DUNG (PROFESSIONAL CONTENT)
+Wording: Content phải tinh tế, trực quan và chuyên nghiệp. Sử dụng thuật ngữ chuyên ngành (Ví dụ: "Khởi tạo giao dịch", "Hệ thống đang xử lý", "Lịch sử biến động số dư").
+
+Strict Tone: Tuyệt đối không viết nội dung tùy tiện, không sử dụng Emoji, không dùng ngôn ngữ suồng sã.
+
+Internationalization: Ưu tiên sử dụng hệ thống lang/vi để quản lý nội dung.
+
+5. ĐẶC THÙ SMM LOGIC (ADVANCED)
+Queue-First: Đẩy đơn sang Provider qua ShouldQueue Job.
+
+Price Logic: Tính toán 100% tại Backend Action. Frontend chỉ hiển thị kết quả đã định dạng.
+
+Refund Automation: Tự động hoàn tiền qua RefundUserBalanceAction nếu Job thất bại sau số lần retry.
+
+6. QUY CHUẨN ĐỊNH DẠNG & COMMENT
+Comments: 100% Tiếng Việt, giải thích Tại sao (Why) cho các đoạn xử lý tài chính/logic phức tạp.
+
+Formatting: * Tiền tệ: number_format($amount, 0, ',', '.') . 'đ'.
+
+Thời gian: Carbon::parse($time)->diffForHumans().
+
+7. HƯỚNG DẪN KHỞI TẠO (BOOTSTRAP PROMPT)
+Khi nhận lệnh, AI tự động:
+
+Soi file public/frontend/ lấy đúng UI Metronic.
+
+Tạo Migration + Model (ULID + Index).
+
+Tạo Action xử lý (Namespace Facades + Transaction).
+
+Tạo Livewire Component (Dùng Form Object).
+
+Tạo Blade View (Chỉ HTML, Asset đẩy ra ngoài, không PHP logic).
+
+🧠 VÍ DỤ MINH HỌA QUY CHUẨN MỚI (Cho AI tham khảo)
+Layout mẹ (app.blade.php):
+
+HTML
+@if(Route::is('order.*'))
+    @push('styles')
+        <link href="{{ asset('assets/css/pages/order.css') }}" rel="stylesheet" />
+    @push('scripts')
+        <script src="{{ asset('assets/js/pages/order.js') }}"></script>
+    @endpush
+@endif
+Blade View (order.blade.php):
+
+HTML
+{{-- CHỈ HTML THUẦN - KHÔNG SCRIPT - KHÔNG PHP --}}
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h3 class="card-title text-gray-800">Khởi tạo đơn hàng mới</h3>
+    </div>
+    <div class="card-body">
+        <x-metronic.input wire:model="quantity" label="Số lượng cần tăng" />
+        <div class="mt-4">
+            <span class="text-muted">Tổng phí thanh toán:</span>
+            <span class="fw-bold text-primary">{{ $total_price }}</span>
+        </div>
+    </div>
+</div>
+
+8. CẤU TRÚC THƯ MỤC ACTIONS (MỞ RỘNG HỆ THỐNG LỚN)
+Logic nghiệp vụ chỉ đặt tại app/Actions, chia theo bounded context (namespace = thư mục con):
+
+- app/Actions/Auth — đăng ký, đăng nhập.
+- app/Actions/Catalog — đọc nền tảng / danh mục / dịch vụ, format option cho UI.
+- app/Actions/Order — tính phí, tạo đơn (mở rộng: submit đơn, refund…).
+- app/Actions/Profile — tài khoản đang đăng nhập (cập nhật hồ sơ, mật khẩu, API key, activity log).
+- app/Actions/Admin/Member — CRUD thành viên, số dư, khóa/mở, danh sách phân trang.
+- app/Actions/Admin/Dashboard — thống kê tổng hợp admin.
+
+Livewire/Controller chỉ điều phối: validate nhẹ, gọi Action->execute(), dispatch view.
+Route client có prefix tên client.* (ví dụ asset điều kiện: Route::is('client.profile')).
+
+9. QUY ƯỚC ĐẶT TÊN FILE ACTION (CHUẨN SMM PANEL)
+- Fetch* — đọc dữ liệu catalog / báo cáo (ví dụ FetchPlatformsAction, FetchServiceCatalogAction).
+- Build* — dựng payload UI (picker, option) từ collection (BuildCategoryPickerOptionsAction).
+- Compute* — tính toán tiền/đơn (ComputeOrderChargeAction).
+- Update* / Regenerate* / Append* / Paginate* — vòng đời tài khoản & audit (UpdateAccountProfileAction, PaginateAccountAuditLogsAction).
+- Adjust* / Remove* / Toggle* — thao tác console lên thành viên (AdjustMemberBalanceAction, ToggleMemberStatusAction).
+- Authenticate* / Register* — cổng đăng nhập & đăng ký (AuthenticateUserAction, RegisterMemberAccountAction).
+Tên file = tên class = {Verb}{Domain}{OptionalQualifier}Action.php — tránh chuỗi dài kiểu ListAllActiveXxx.

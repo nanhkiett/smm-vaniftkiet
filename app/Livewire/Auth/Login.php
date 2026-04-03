@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Auth;
 
-use App\Actions\Auth\LoginUserAction;
+use App\Actions\Auth\AuthenticateUserAction;
 use App\Livewire\Forms\LoginForm;
-use Livewire\Component;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
+#[Layout('layouts.auth')]
 class Login extends Component
 {
     public LoginForm $form;
@@ -14,9 +16,9 @@ class Login extends Component
     /**
      * Xử lý đăng nhập.
      * 
-     * @param LoginUserAction $action
+     * @param AuthenticateUserAction $action
      */
-    public function login(LoginUserAction $action)
+    public function login(AuthenticateUserAction $action)
     {
         try {
             $this->validate();
@@ -33,7 +35,7 @@ class Login extends Component
             $this->dispatch('swal', [
                 'icon' => 'error',
                 'title' => 'Thất bại',
-                'text' => $e->validator->errors()->first()
+                'text' => $this->firstValidationMessage($e),
             ]);
             // Vẫn ném exception để hiện lỗi inline đỏ dưới ô nhập
             throw $e;
@@ -48,6 +50,11 @@ class Login extends Component
 
     public function render()
     {
-        return view('livewire.auth.login')->layout('layouts.auth');
+        return view('livewire.auth.login');
+    }
+
+    private function firstValidationMessage(ValidationException $e): string
+    {
+        return (string) (collect($e->errors())->flatten()->first() ?? $e->getMessage());
     }
 }

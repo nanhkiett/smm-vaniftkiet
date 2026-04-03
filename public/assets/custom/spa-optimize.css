@@ -34,32 +34,52 @@
     animation: spinner-border 0.6s linear infinite;
 }
 
-/* Page Loader Overlay fix */
-.page-loader {
-    display: none;
-    background: rgba(255, 255, 255, 0.7);
-    [data-bs-theme="dark"] & { background: rgba(0, 0, 0, 0.7); }
-    z-index: 99999;
+/* Page Loader Overlay fix - Đảm bảo khi F5 không bao giờ bị hiện scrollbar */
+body.page-loading {
+    overflow: hidden !important; /* Khóa cuộn khi đang tải trang lần đầu */
 }
 
-/* 3. Hiệu ứng Navigating (Blur & Fade-out) chuẩn 'Next.js' */
+.page-loader {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95); /* Tăng độ mờ trắng cho sang */
+    [data-bs-theme="dark"] & { background: rgba(29, 30, 43, 0.95); }
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Ẩn hoàn toàn thanh cuộn thị giác (Hide Browser Scrollbar) */
+html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+html::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Brave */
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* 3. Thanh progress khi điều hướng — không blur/opacity shell (gây nháy khi Livewire morph) */
 .navigating #loading-progress-global {
     display: block !important;
 }
 
-.navigating #kt_app_wrapper, 
-.navigating .auth-wrapper {
-    opacity: 0.4;
-    filter: blur(1.5px);
-    transition: all 0.3s ease-in-out;
-    pointer-events: none;
-}
+/* 4. Không dùng keyframes trên vùng Livewire morph (#kt_app_content*) — mỗi navigate sẽ chạy lại animation → nháy */
 
-/* 4. Định nghĩa Keyframes cho hiệu ứng Fade In & Slide Up (Chiêu 1) */
 @keyframes fadeSlideUp {
     0% {
         opacity: 0;
-        transform: translateY(15px);
+        transform: translateY(12px);
     }
     100% {
         opacity: 1;
@@ -67,8 +87,6 @@
     }
 }
 
-/* Áp dụng vào Main Content Container */
-.app-main, .auth-wrapper {
-    animation: fadeSlideUp 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-    will-change: opacity, transform;
+.auth-wrapper {
+    animation: fadeSlideUp 0.35s cubic-bezier(0.23, 1, 0.32, 1) both;
 }

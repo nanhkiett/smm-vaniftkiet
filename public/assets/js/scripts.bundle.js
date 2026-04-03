@@ -7497,7 +7497,8 @@ var KTUtil = function() {
         onDOMContentLoaded: function(callback) {
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', callback);
-                document.addEventListener('livewire:navigated', callback);
+                // Bỏ livewire:navigated: Metronic (KTAppSidebar, KTThemeMode, KTLayoutSearch, …)
+                // chạy lại mỗi lần SPA → cuộn sidebar, bind trùng toggle, nháy toàn layout.
             } else {
                 callback();
             }

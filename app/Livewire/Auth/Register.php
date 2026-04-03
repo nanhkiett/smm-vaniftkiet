@@ -2,13 +2,14 @@
 
 namespace App\Livewire\Auth;
 
-use App\Actions\Auth\RegisterUserAction;
+use App\Actions\Auth\RegisterMemberAccountAction;
 use App\Livewire\Forms\RegisterForm;
-use Livewire\Component;
-use Illuminate\Validation\ValidationException;
-
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
+#[Layout('layouts.auth')]
 class Register extends Component
 {
     public RegisterForm $form;
@@ -16,9 +17,9 @@ class Register extends Component
     /**
      * Xử lý đăng kí người dùng.
      * 
-     * @param RegisterUserAction $action
+     * @param RegisterMemberAccountAction $action
      */
-    public function register(RegisterUserAction $action)
+    public function register(RegisterMemberAccountAction $action)
     {
         try {
             $this->validate();
@@ -40,7 +41,7 @@ class Register extends Component
             $this->dispatch('swal', [
                 'icon' => 'error',
                 'title' => 'Dữ liệu không hợp lệ',
-                'text' => $e->validator->errors()->first()
+                'text' => $this->firstValidationMessage($e),
             ]);
             throw $e;
         } catch (\Exception $e) {
@@ -54,6 +55,11 @@ class Register extends Component
 
     public function render()
     {
-        return view('livewire.auth.register')->layout('layouts.auth');
+        return view('livewire.auth.register');
+    }
+
+    private function firstValidationMessage(ValidationException $e): string
+    {
+        return (string) (collect($e->errors())->flatten()->first() ?? $e->getMessage());
     }
 }

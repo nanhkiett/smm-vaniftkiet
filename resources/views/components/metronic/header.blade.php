@@ -25,6 +25,18 @@
             <!--begin::Menu wrapper-->
             <div class="app-header-menu app-header-mobile-drawer align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="250px" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_app_header_menu_toggle" data-kt-swapper="true" data-kt-swapper-mode="{default: 'append', lg: 'prepend'}" data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header_wrapper'}">
                 <div class="menu menu-rounded menu-column menu-lg-row my-5 my-lg-0 align-items-stretch fw-semibold px-2 px-lg-0" id="kt_app_header_menu" data-kt-menu="true">
+                    @auth
+                        <div class="menu-item me-lg-1">
+                            <a class="menu-link py-3 {{ Route::is('client.dashboard') ? 'active' : '' }}" href="{{ route('client.dashboard') }}" wire:navigate>
+                                <span class="menu-title">Khởi tạo đơn</span>
+                            </a>
+                        </div>
+                        <div class="menu-item me-lg-1">
+                            <a class="menu-link py-3 {{ Route::is('client.profile') ? 'active' : '' }}" href="{{ route('client.profile') }}" wire:navigate>
+                                <span class="menu-title">Hồ sơ tài khoản</span>
+                            </a>
+                        </div>
+                    @endauth
                 </div>
             </div>
             <!--end::Menu wrapper-->
@@ -35,12 +47,12 @@
                 <div class="app-navbar-item align-items-stretch ms-1 ms-md-4">
                     <!-- Disabled Search Engine to prevent searchObject.on Error in SPA -->
                     <div id="kt_header_search" class="header-search d-flex align-items-stretch" data-search-disabled="true">
-                        <div class="d-flex align-items-center" data-kt-search-element="toggle" id="kt_header_search_toggle">
+                        <div class="d-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="kt_header_search_toggle">
                             <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px">
                                 <i class="ki-duotone ki-magnifier fs-2"><span class="path1"></span><span class="path2"></span></i>
                             </div>
                         </div>
-                        <div data-kt-search-element="content" class="menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px">
+                        <div class="dropdown-menu menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px">
                             <div data-kt-search-element="wrapper">
                                 <form data-kt-search-element="form" class="w-100 position-relative mb-3" autocomplete="off">
                                     <i class="ki-duotone ki-magnifier fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-0"><span class="path1"></span><span class="path2"></span></i>
@@ -56,10 +68,10 @@
 
                 <!--begin::Notifications-->
                 <div class="app-navbar-item ms-1 ms-md-4">
-                    <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                    <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                         <i class="ki-duotone ki-notification-on fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
                     </div>
-                    <div class="menu menu-sub menu-sub-dropdown menu-column w-350px" data-kt-menu="true">
+                    <div class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column w-350px">
                         <div class="d-flex flex-column bgi-no-repeat rounded-top" style="background-image:url('{{ asset('assets/media/misc/menu-header-bg.jpg') }}')">
                             <h3 class="text-white fw-semibold px-9 mt-10 mb-6">Thông báo</h3>
                         </div>
@@ -70,11 +82,11 @@
 
                 <!--begin::My apps-->
                 <div class="app-navbar-item ms-1 ms-md-4">
-                    <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                    <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                         <i class="ki-duotone ki-element-11 fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
                     </div>
                     <!--begin::My apps menu-->
-                    <div class="menu menu-sub menu-sub-dropdown menu-column w-100 w-sm-350px" data-kt-menu="true">
+                    <div class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column w-100 w-sm-350px">
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">My Apps</div>
@@ -193,11 +205,11 @@
 
                 <!--begin::Theme mode-->
                 <div class="app-navbar-item ms-1 ms-md-4">
-                    <a href="#" class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px" data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                    <a href="#" class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px" data-bs-toggle="dropdown" data-bs-auto-close="true">
                         <i class="ki-duotone ki-night-day theme-light-show fs-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span></i>
                         <i class="ki-duotone ki-moon theme-dark-show fs-1"><span class="path1"></span><span class="path2"></span></i>
                     </a>
-                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px" data-kt-menu="true" data-kt-element="theme-mode-menu">
+                    <div class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px" data-kt-element="theme-mode-menu">
                         <div class="menu-item px-3 my-0">
                             <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
                                 <span class="menu-icon" data-kt-element="icon"><i class="ki-duotone ki-night-day fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span></i></span>
@@ -230,10 +242,10 @@
                     @guest
                         <a href="{{ route('login') }}" class="btn btn-primary btn-sm" wire:navigate>Đăng nhập</a>
                     @else
-                        <div class="cursor-pointer symbol symbol-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                        <div class="cursor-pointer symbol symbol-35px" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                             <img src="{{ asset('assets/media/avatars/300-1.jpg') }}" class="rounded-3" alt="user" />
                         </div>
-                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
+                        <div class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
                             <div class="menu-item px-3">
                                 <div class="menu-content d-flex align-items-center px-3">
                                     <div class="symbol symbol-50px me-5"><img alt="Logo" src="{{ asset('assets/media/avatars/300-1.jpg') }}" /></div>
@@ -242,12 +254,14 @@
                                             {{ Auth::user()->name }}
                                             <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">{{ number_format((float)Auth::user()->balance, 0, ',', '.') }}đ</span>
                                         </div>
-                                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">{{ Auth::user()->email }}</a>
+                                        <a href="{{ route('client.profile') }}" class="fw-semibold text-muted text-hover-primary fs-7" wire:navigate>{{ Auth::user()->email }}</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="separator my-2"></div>
-                            <div class="menu-item px-5"><a href="#" class="menu-link px-5" wire:navigate>Tài khoản</a></div>
+                            <div class="menu-item px-5">
+                                <a href="{{ route('client.profile') }}" class="menu-link px-5" wire:navigate>Hồ sơ &amp; bảo mật</a>
+                            </div>
                             <livewire:auth.logout />
                         </div>
                     @endguest
